@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class GameCharacter extends JPanel implements ActionListener {
-    private int x = 200, y = 200;
+    private int x = 170, y = 200;
     private int velocityY = 0;
     private boolean isJumping = false;
     private boolean isSitting = false;
@@ -17,8 +17,8 @@ public class GameCharacter extends JPanel implements ActionListener {
     private JLabel characterLabel;
     
     // Different states for the character
-    private final int GROUND_Y = 350;
-    private final int SIT_Y = 370;
+    private final int GROUND_Y = 210;
+    private final int SIT_Y = 210;
     
     public GameCharacter() {
         setLayout(null);
@@ -238,10 +238,13 @@ public class GameCharacter extends JPanel implements ActionListener {
             TopPanel.setPreferredSize(new Dimension(500, 50)); // Width: 150px
             TopPanel.setLayout(new BoxLayout(TopPanel, BoxLayout.Y_AXIS));
             TopPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            
 
             frame.add(leftPanel, BorderLayout.WEST);
             frame.add(rightPanel, BorderLayout.EAST);
             frame.add(TopPanel, BorderLayout.NORTH);
+
+            
         });
     }
 }
