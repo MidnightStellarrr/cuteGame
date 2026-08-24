@@ -33,7 +33,7 @@ public class GameCharacter extends JPanel implements ActionListener {
         add(characterLabel);
         
         // Timer for animation loop
-        timer = new Timer(16, this); // ~60 FPS
+        timer = new Timer(16, this);
         timer.start();
         
         // Add key listener for controls
@@ -60,45 +60,18 @@ public class GameCharacter extends JPanel implements ActionListener {
                 }
             }
         });
-        
-        // Button panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBounds(0, 320, 500, 300);
-        buttonPanel.setBackground(Color.DARK_GRAY);
-        add(buttonPanel);
-        
-        // Create buttons
-        JButton leftBtn = new JButton("← Left");
-        JButton rightBtn = new JButton("Right →");
-        JButton jumpBtn = new JButton("↑ Jump");
-        JButton sitBtn = new JButton("↓ Sit");
-        
-        // Add action listeners to buttons
-        leftBtn.addActionListener(e -> moveLeft());
-        rightBtn.addActionListener(e -> moveRight());
-        jumpBtn.addActionListener(e -> jump());
-        sitBtn.addActionListener(e -> toggleSit());
-        
-        buttonPanel.add(leftBtn);
-        buttonPanel.add(rightBtn);
-        buttonPanel.add(jumpBtn);
-        buttonPanel.add(sitBtn);
-
     }
     
     private Image createCharacterImage(boolean sitting) {
         BufferedImage image = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
         
-        // Enable anti-aliasing for smoother graphics
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         if (sitting) {
-            // Sitting character - shorter and wider
             g2d.setColor(Color.BLUE);
             g2d.fillOval(0, 15, 50, 35);
             
-            // Eyes
             g2d.setColor(Color.WHITE);
             g2d.fillOval(10, 25, 10, 10);
             g2d.fillOval(30, 25, 10, 10);
@@ -106,15 +79,12 @@ public class GameCharacter extends JPanel implements ActionListener {
             g2d.fillOval(13, 28, 5, 5);
             g2d.fillOval(33, 28, 5, 5);
             
-            // Mouth (neutral)
             g2d.setColor(Color.BLACK);
             g2d.drawLine(15, 40, 35, 40);
         } else {
-            // Standing character
             g2d.setColor(Color.BLUE);
             g2d.fillOval(0, 0, 50, 50);
             
-            // Eyes
             g2d.setColor(Color.WHITE);
             g2d.fillOval(10, 15, 10, 10);
             g2d.fillOval(30, 15, 10, 10);
@@ -122,7 +92,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             g2d.fillOval(13, 18, 5, 5);
             g2d.fillOval(33, 18, 5, 5);
             
-            // Mouth (smile)
             g2d.setColor(Color.BLACK);
             g2d.drawArc(15, 25, 20, 15, 0, -180);
         }
@@ -148,17 +117,15 @@ public class GameCharacter extends JPanel implements ActionListener {
     public void jump() {
         if (!isJumping && !isSitting) {
             isJumping = true;
-            velocityY = -15; // Jump force
+            velocityY = -15;
         }
     }
     
     public void toggleSit() {
         if (!isJumping) {
             if (isSitting) {
-                // Stand up
                 standUp();
             } else {
-                // Sit down
                 sit();
             }
         }
@@ -191,13 +158,10 @@ public class GameCharacter extends JPanel implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Physics update for jumping
         if (isJumping) {
-            // Apply gravity
             velocityY += 1;
             y += velocityY;
             
-            // Ground collision
             if (y >= GROUND_Y) {
                 y = GROUND_Y;
                 isJumping = false;
@@ -211,40 +175,74 @@ public class GameCharacter extends JPanel implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Game Character Demo");
+            
+            // Use BorderLayout for the main frame
+            frame.setLayout(new BorderLayout());
+            
+            // Create the game panel
             GameCharacter game = new GameCharacter();
-            frame.add(game);
-            frame.pack();
+            
+            // ----- LEFT PANEL (WEST) -----
+            JPanel leftPanel = new JPanel();
+            leftPanel.setBackground(Color.DARK_GRAY);
+            leftPanel.setPreferredSize(new Dimension(50, 500));
+            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+            leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            // ----- RIGHT PANEL (EAST) -----
+            JPanel rightPanel = new JPanel();
+            rightPanel.setBackground(Color.DARK_GRAY);
+            rightPanel.setPreferredSize(new Dimension(50, 500));
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+            rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            // ----- TOP PANEL (NORTH) -----
+            JPanel topPanel = new JPanel();
+            topPanel.setBackground(Color.DARK_GRAY);
+            topPanel.setPreferredSize(new Dimension(500, 50));
+            topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+            topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            
+            // ----- BOTTOM PANEL (SOUTH) - BUTTONS GO HERE! -----
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.setBackground(Color.DARK_GRAY);
+            bottomPanel.setPreferredSize(new Dimension(500, 200)); // Adjust height as needed
+            bottomPanel.setLayout(new GridLayout(1, 4, 10, 10));
+            bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            
+            // Create buttons
+            JButton leftBtn = new JButton("← Left");
+            JButton rightBtn = new JButton("Right →");
+            JButton jumpBtn = new JButton("↑ Jump");
+            JButton sitBtn = new JButton("↓ Sit");
+            
+            // Add action listeners to buttons
+            leftBtn.addActionListener(e -> game.moveLeft());
+            rightBtn.addActionListener(e -> game.moveRight());
+            jumpBtn.addActionListener(e -> game.jump());
+            sitBtn.addActionListener(e -> game.toggleSit());
+            
+            // Add buttons to bottom panel
+            bottomPanel.add(leftBtn);
+            bottomPanel.add(rightBtn);
+            bottomPanel.add(jumpBtn);
+            bottomPanel.add(sitBtn);
+
+            // ----- ADD ALL PANELS TO FRAME -----
+            frame.add(leftPanel, BorderLayout.WEST);
+            frame.add(rightPanel, BorderLayout.EAST);
+            frame.add(topPanel, BorderLayout.NORTH);
+            frame.add(game, BorderLayout.CENTER);
+            frame.add(bottomPanel, BorderLayout.SOUTH); // ← BOTTOM PANEL ADDED!
+
+            // ----- FRAME SETTINGS -----
+            frame.setSize(500, 600);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
             
             // Request focus for keyboard input
             game.requestFocusInWindow();
-
-            JPanel leftPanel = new JPanel();
-            leftPanel.setBackground(Color.DARK_GRAY);
-            leftPanel.setPreferredSize(new Dimension(50, 500)); // Width: 150px
-            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-            leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-            JPanel rightPanel = new JPanel();
-            rightPanel.setBackground(Color.DARK_GRAY);
-            rightPanel.setPreferredSize(new Dimension(50, 500)); // Width: 150px
-            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-            rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-            JPanel TopPanel = new JPanel();
-            TopPanel.setBackground(Color.DARK_GRAY);
-            TopPanel.setPreferredSize(new Dimension(500, 50)); // Width: 150px
-            TopPanel.setLayout(new BoxLayout(TopPanel, BoxLayout.Y_AXIS));
-            TopPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            
-
-            frame.add(leftPanel, BorderLayout.WEST);
-            frame.add(rightPanel, BorderLayout.EAST);
-            frame.add(TopPanel, BorderLayout.NORTH);
-
-            
         });
     }
 }
