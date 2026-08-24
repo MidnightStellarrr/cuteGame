@@ -215,6 +215,11 @@ public class GameCharacter extends JPanel implements ActionListener {
             JButton rightBtn = new JButton("Right →");
             JButton jumpBtn = new JButton("↑ Jump");
             JButton sitBtn = new JButton("↓ Sit");
+
+            leftBtn.setPreferredSize(new Dimension(100, 50));   // Width: 100px, Height: 50px
+            rightBtn.setPreferredSize(new Dimension(100, 50));
+            jumpBtn.setPreferredSize(new Dimension(100, 50));
+            sitBtn.setPreferredSize(new Dimension(100, 50));
             
             // Add action listeners to buttons
             leftBtn.addActionListener(e -> game.moveLeft());
