@@ -203,42 +203,144 @@ public class GameCharacter extends JPanel implements ActionListener {
             topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
             topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             
-            // ----- BOTTOM PANEL (SOUTH) - BUTTONS GO HERE! -----
+            // ----- BOTTOM PANEL (SOUTH) - UNIFIED CROSS! -----
             JPanel bottomPanel = new JPanel();
             bottomPanel.setBackground(Color.DARK_GRAY);
-            bottomPanel.setPreferredSize(new Dimension(500, 200)); // Adjust height as needed
-            bottomPanel.setLayout(new GridLayout(1, 4, 10, 10));
-            bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            bottomPanel.setPreferredSize(new Dimension(500, 200));
+            bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 1));
+            bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
             
-            // Create buttons
-            JButton leftBtn = new JButton("← Left");
-            JButton rightBtn = new JButton("Right →");
-            JButton jumpBtn = new JButton("↑ Jump");
-            JButton sitBtn = new JButton("↓ Sit");
-
-            leftBtn.setPreferredSize(new Dimension(100, 50));   // Width: 100px, Height: 50px
-            rightBtn.setPreferredSize(new Dimension(100, 50));
-            jumpBtn.setPreferredSize(new Dimension(100, 50));
-            sitBtn.setPreferredSize(new Dimension(100, 50));
+            // Create cross panel - holds the unified cross
+            JPanel crossPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    
+                    // Draw the cross background (dark gray)
+                    g2d.setColor(Color.DARK_GRAY);
+                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                }
+            };
+            crossPanel.setBackground(Color.DARK_GRAY);
+            crossPanel.setLayout(new GridBagLayout());
+            crossPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+            crossPanel.setPreferredSize(new Dimension(180, 180));
             
-            // Add action listeners to buttons
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(0, 0, 0, 0); // NO GAPS!
+            
+            // Create buttons - they will form a unified D-pad cross
+            JButton upBtn = new JButton("▲");
+            JButton downBtn = new JButton("▼");
+            JButton leftBtn = new JButton("◄");
+            JButton rightBtn = new JButton("►");
+            
+            // Create the center non-clickable square
+            JPanel centerSquare = new JPanel();
+            centerSquare.setBackground(new Color(70, 70, 70));
+            centerSquare.setPreferredSize(new Dimension(56, 56));
+            centerSquare.setBorder(null);
+            
+            Dimension btnSize = new Dimension(56, 56);
+            Font btnFont = new Font("Arial", Font.BOLD, 22);
+            Color btnColor = new Color(70, 70, 70);
+            Color borderColor = Color.WHITE;
+            
+            // Style UP button - remove BOTTOM border
+            upBtn.setPreferredSize(btnSize);
+            upBtn.setMinimumSize(btnSize);
+            upBtn.setMaximumSize(btnSize);
+            upBtn.setFont(btnFont);
+            upBtn.setBackground(btnColor);
+            upBtn.setForeground(Color.WHITE);
+            upBtn.setFocusPainted(false);
+            upBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, borderColor)); // No bottom border
+            upBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            upBtn.setOpaque(true);
+            upBtn.setContentAreaFilled(true);
+            
+            // Style DOWN button - remove TOP border
+            downBtn.setPreferredSize(btnSize);
+            downBtn.setMinimumSize(btnSize);
+            downBtn.setMaximumSize(btnSize);
+            downBtn.setFont(btnFont);
+            downBtn.setBackground(btnColor);
+            downBtn.setForeground(Color.WHITE);
+            downBtn.setFocusPainted(false);
+            downBtn.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, borderColor)); // No top border
+            downBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            downBtn.setOpaque(true);
+            downBtn.setContentAreaFilled(true);
+            
+            // Style LEFT button - remove RIGHT border
+            leftBtn.setPreferredSize(btnSize);
+            leftBtn.setMinimumSize(btnSize);
+            leftBtn.setMaximumSize(btnSize);
+            leftBtn.setFont(btnFont);
+            leftBtn.setBackground(btnColor);
+            leftBtn.setForeground(Color.WHITE);
+            leftBtn.setFocusPainted(false);
+            leftBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0, borderColor)); // No right border
+            leftBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            leftBtn.setOpaque(true);
+            leftBtn.setContentAreaFilled(true);
+            
+            // Style RIGHT button - remove LEFT border
+            rightBtn.setPreferredSize(btnSize);
+            rightBtn.setMinimumSize(btnSize);
+            rightBtn.setMaximumSize(btnSize);
+            rightBtn.setFont(btnFont);
+            rightBtn.setBackground(btnColor);
+            rightBtn.setForeground(Color.WHITE);
+            rightBtn.setFocusPainted(false);
+            rightBtn.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 2, borderColor)); // No left border
+            rightBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            rightBtn.setOpaque(true);
+            rightBtn.setContentAreaFilled(true);
+            
+            // Position buttons in cross pattern with center square
+            // UP button (top center)
+            gbc.gridx = 1;
+            gbc.gridy = 0;
+            crossPanel.add(upBtn, gbc);
+            
+            // LEFT button (middle left)
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            crossPanel.add(leftBtn, gbc);
+            
+            // CENTER SQUARE (middle center - not clickable)
+            gbc.gridx = 1;
+            gbc.gridy = 1;
+            crossPanel.add(centerSquare, gbc);
+            
+            // RIGHT button (middle right)
+            gbc.gridx = 2;
+            gbc.gridy = 1;
+            crossPanel.add(rightBtn, gbc);
+            
+            // DOWN button (bottom center)
+            gbc.gridx = 1;
+            gbc.gridy = 2;
+            crossPanel.add(downBtn, gbc);
+            
+            // Add action listeners
+            upBtn.addActionListener(e -> game.jump());
+            downBtn.addActionListener(e -> game.toggleSit());
             leftBtn.addActionListener(e -> game.moveLeft());
             rightBtn.addActionListener(e -> game.moveRight());
-            jumpBtn.addActionListener(e -> game.jump());
-            sitBtn.addActionListener(e -> game.toggleSit());
             
-            // Add buttons to bottom panel
-            bottomPanel.add(leftBtn);
-            bottomPanel.add(rightBtn);
-            bottomPanel.add(jumpBtn);
-            bottomPanel.add(sitBtn);
+            // Add cross panel to bottom panel
+            bottomPanel.add(crossPanel);
 
             // ----- ADD ALL PANELS TO FRAME -----
             frame.add(leftPanel, BorderLayout.WEST);
             frame.add(rightPanel, BorderLayout.EAST);
             frame.add(topPanel, BorderLayout.NORTH);
             frame.add(game, BorderLayout.CENTER);
-            frame.add(bottomPanel, BorderLayout.SOUTH); // ← BOTTOM PANEL ADDED!
+            frame.add(bottomPanel, BorderLayout.SOUTH);
 
             // ----- FRAME SETTINGS -----
             frame.setSize(500, 600);
