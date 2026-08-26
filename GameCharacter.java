@@ -20,6 +20,10 @@ public class GameCharacter extends JPanel implements ActionListener {
     private final int GROUND_Y = 210;
     private final int SIT_Y = 210;
     
+    // Expression counter
+    private int expressionIndex = 0;
+    private final String[] expressions = {"😊", "😢", "😮", "😠", "😎"};
+    
     public GameCharacter() {
         setLayout(null);
         setBackground(Color.LIGHT_GRAY);
@@ -92,12 +96,51 @@ public class GameCharacter extends JPanel implements ActionListener {
             g2d.fillOval(13, 18, 5, 5);
             g2d.fillOval(33, 18, 5, 5);
             
+            // Draw different expressions based on expressionIndex
             g2d.setColor(Color.BLACK);
-            g2d.drawArc(15, 25, 20, 15, 0, -180);
+            g2d.setStroke(new BasicStroke(2));
+            
+            switch (expressionIndex) {
+                case 0: // Happy 😊
+                    g2d.drawArc(15, 25, 20, 15, 0, -180);
+                    break;
+                case 1: // Sad 😢
+                    g2d.drawArc(15, 30, 20, 15, 0, 180);
+                    break;
+                case 2: // Surprised 😮
+                    g2d.drawOval(17, 28, 16, 12);
+                    break;
+                case 3: // Angry 😠
+                    g2d.drawLine(12, 30, 20, 35);
+                    g2d.drawLine(30, 30, 38, 35);
+                    g2d.drawArc(12, 25, 26, 15, 0, 180);
+                    break;
+                case 4: // Cool 😎
+                    g2d.drawLine(10, 28, 40, 28);
+                    g2d.drawArc(15, 25, 20, 15, 0, -180);
+                    break;
+                default:
+                    g2d.drawArc(15, 25, 20, 15, 0, -180);
+                    break;
+            }
         }
         
         g2d.dispose();
         return image;
+    }
+    
+    public void changeExpression() {
+        expressionIndex = (expressionIndex + 1) % expressions.length;
+        // Update the character image with new expression
+        characterImage = createCharacterImage(false);
+        if (!isSitting) {
+            characterLabel.setIcon(new ImageIcon(characterImage));
+        } else {
+            // If sitting, update sitting image too
+            sittingImage = createCharacterImage(true);
+            characterLabel.setIcon(new ImageIcon(sittingImage));
+        }
+        System.out.println("Expression: " + expressions[expressionIndex]);
     }
     
     public void moveLeft() {
@@ -135,6 +178,7 @@ public class GameCharacter extends JPanel implements ActionListener {
         if (!isJumping && !isSitting) {
             isSitting = true;
             y = SIT_Y;
+            sittingImage = createCharacterImage(true);
             characterLabel.setIcon(new ImageIcon(sittingImage));
             characterLabel.setBounds(x, y, 50, 35);
             updateCharacterPosition();
@@ -145,6 +189,7 @@ public class GameCharacter extends JPanel implements ActionListener {
         if (isSitting && !isJumping) {
             isSitting = false;
             y = GROUND_Y;
+            characterImage = createCharacterImage(false);
             characterLabel.setIcon(new ImageIcon(characterImage));
             characterLabel.setBounds(x, y, 50, 50);
             updateCharacterPosition();
@@ -203,12 +248,12 @@ public class GameCharacter extends JPanel implements ActionListener {
             topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
             topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             
-            // ----- BOTTOM PANEL (SOUTH) - UNIFIED CROSS! -----
+            // ----- BOTTOM PANEL (SOUTH) - UNIFIED CROSS + EXPRESSION BUTTON! -----
             JPanel bottomPanel = new JPanel();
             bottomPanel.setBackground(Color.DARK_GRAY);
             bottomPanel.setPreferredSize(new Dimension(500, 200));
-            bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 1));
-            bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+            bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
+            bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             
             // Create cross panel - holds the unified cross
             JPanel crossPanel = new JPanel() {
@@ -256,7 +301,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             upBtn.setBackground(btnColor);
             upBtn.setForeground(Color.WHITE);
             upBtn.setFocusPainted(false);
-            upBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, borderColor)); // No bottom border
+            upBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, borderColor));
             upBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             upBtn.setOpaque(true);
             upBtn.setContentAreaFilled(true);
@@ -269,7 +314,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             downBtn.setBackground(btnColor);
             downBtn.setForeground(Color.WHITE);
             downBtn.setFocusPainted(false);
-            downBtn.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, borderColor)); // No top border
+            downBtn.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, borderColor));
             downBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             downBtn.setOpaque(true);
             downBtn.setContentAreaFilled(true);
@@ -282,7 +327,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             leftBtn.setBackground(btnColor);
             leftBtn.setForeground(Color.WHITE);
             leftBtn.setFocusPainted(false);
-            leftBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0, borderColor)); // No right border
+            leftBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0, borderColor));
             leftBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             leftBtn.setOpaque(true);
             leftBtn.setContentAreaFilled(true);
@@ -295,7 +340,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             rightBtn.setBackground(btnColor);
             rightBtn.setForeground(Color.WHITE);
             rightBtn.setFocusPainted(false);
-            rightBtn.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 2, borderColor)); // No left border
+            rightBtn.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 2, borderColor));
             rightBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             rightBtn.setOpaque(true);
             rightBtn.setContentAreaFilled(true);
@@ -326,14 +371,62 @@ public class GameCharacter extends JPanel implements ActionListener {
             gbc.gridy = 2;
             crossPanel.add(downBtn, gbc);
             
-            // Add action listeners
+            // Add action listeners for cross buttons
             upBtn.addActionListener(e -> game.jump());
             downBtn.addActionListener(e -> game.toggleSit());
             leftBtn.addActionListener(e -> game.moveLeft());
             rightBtn.addActionListener(e -> game.moveRight());
             
-            // Add cross panel to bottom panel
+            // ----- EXPRESSION BUTTON (Circle button on the right) -----
+            // Create a circular button using JButton override
+            JButton expressionBtn = new JButton("😊") {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    // Fill circle background
+                    g2d.setColor(new Color(60, 60, 60));
+                    g2d.fillOval(0, 0, getWidth(), getHeight());
+                    // Draw circle border
+                    g2d.setColor(Color.WHITE);
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
+                    g2d.dispose();
+                    // Draw the text/emoji
+                    super.paintComponent(g);
+                }
+            };
+            
+            // Configure the expression button
+            expressionBtn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
+            expressionBtn.setForeground(Color.WHITE);
+            expressionBtn.setFocusPainted(false);
+            expressionBtn.setContentAreaFilled(false);
+            expressionBtn.setBorder(null);
+            expressionBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            expressionBtn.setPreferredSize(new Dimension(80, 80));
+            expressionBtn.setMinimumSize(new Dimension(80, 80));
+            expressionBtn.setMaximumSize(new Dimension(80, 80));
+            
+            // Add expression button action - cycles through expressions
+            expressionBtn.addActionListener(e -> {
+                game.changeExpression();
+                // Update button text to show current expression
+                String[] emojis = {"😊", "😢", "😮", "😠", "😎"};
+                int currentIndex = game.expressionIndex;
+                expressionBtn.setText(emojis[currentIndex]);
+            });
+            
+            // Add panels to bottom panel
             bottomPanel.add(crossPanel);
+            
+            // Add a spacer panel to push expression button to the right
+            JPanel spacer = new JPanel();
+            spacer.setBackground(Color.DARK_GRAY);
+            spacer.setPreferredSize(new Dimension(90, 80));
+            bottomPanel.add(spacer);
+            
+            bottomPanel.add(expressionBtn);
 
             // ----- ADD ALL PANELS TO FRAME -----
             frame.add(leftPanel, BorderLayout.WEST);
