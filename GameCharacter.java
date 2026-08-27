@@ -428,15 +428,46 @@ public class GameCharacter extends JPanel implements ActionListener {
             
             bottomPanel.add(expressionBtn);
 
+            // ----- INNER FRAME PANEL (Game Boy style screen border) -----
+            // This wraps around the game panel with a dark frame
+            JPanel innerFrame = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    
+                    // Draw dark border/frame
+                    g2d.setColor(new Color(30, 30, 30));
+                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                    
+                    // Draw inner border (slightly lighter)
+                    g2d.setColor(new Color(50, 50, 50));
+                    g2d.setStroke(new BasicStroke(3));
+                    g2d.drawRoundRect(8, 8, getWidth() - 16, getHeight() - 16, 12, 12);
+                    
+                    // Draw subtle highlight
+                    g2d.setColor(new Color(70, 70, 70));
+                    g2d.setStroke(new BasicStroke(1));
+                    g2d.drawRoundRect(10, 10, getWidth() - 20, getHeight() - 20, 10, 10);
+                }
+            };
+            innerFrame.setBackground(new Color(20, 20, 20));
+            innerFrame.setLayout(new BorderLayout());
+            innerFrame.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            
+            // Add the game panel inside the inner frame
+            innerFrame.add(game, BorderLayout.CENTER);
+
             // ----- ADD ALL PANELS TO FRAME -----
             frame.add(leftPanel, BorderLayout.WEST);
             frame.add(rightPanel, BorderLayout.EAST);
             frame.add(topPanel, BorderLayout.NORTH);
-            frame.add(game, BorderLayout.CENTER);
+            frame.add(innerFrame, BorderLayout.CENTER);  // ← Inner frame instead of game
             frame.add(bottomPanel, BorderLayout.SOUTH);
 
             // ----- FRAME SETTINGS -----
-            frame.setSize(500, 600);
+            frame.setSize(550, 650);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
