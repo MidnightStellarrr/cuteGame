@@ -229,28 +229,28 @@ public class GameCharacter extends JPanel implements ActionListener {
             
             // ----- LEFT PANEL (WEST) -----
             JPanel leftPanel = new JPanel();
-            leftPanel.setBackground(Color.DARK_GRAY);
+            leftPanel.setBackground(new Color(245, 240, 235));
             leftPanel.setPreferredSize(new Dimension(50, 500));
             leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
             leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             // ----- RIGHT PANEL (EAST) -----
             JPanel rightPanel = new JPanel();
-            rightPanel.setBackground(Color.DARK_GRAY);
+            rightPanel.setBackground(new Color(245, 240, 235));
             rightPanel.setPreferredSize(new Dimension(50, 500));
             rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
             rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             // ----- TOP PANEL (NORTH) -----
             JPanel topPanel = new JPanel();
-            topPanel.setBackground(Color.DARK_GRAY);
+            topPanel.setBackground(new Color(245, 240, 235));
             topPanel.setPreferredSize(new Dimension(500, 50));
             topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
             topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             
             // ----- BOTTOM PANEL (SOUTH) - UNIFIED CROSS + EXPRESSION BUTTON! -----
             JPanel bottomPanel = new JPanel();
-            bottomPanel.setBackground(Color.DARK_GRAY);
+            bottomPanel.setBackground(new Color(245, 240, 235));
             bottomPanel.setPreferredSize(new Dimension(500, 200));
             bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0));
             bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -264,23 +264,22 @@ public class GameCharacter extends JPanel implements ActionListener {
                     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     
                     // Draw the cross background (dark gray)
-                    g2d.setColor(Color.DARK_GRAY);
+                    g2d.setColor(new Color(245, 240, 235));
                     g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
                 }
             };
-            crossPanel.setBackground(Color.DARK_GRAY);
+            crossPanel.setBackground(new Color(245, 240, 235));
             crossPanel.setLayout(new GridBagLayout());
-            crossPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
             crossPanel.setPreferredSize(new Dimension(180, 180));
             
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(0, 0, 0, 0); // NO GAPS!
             
             // Create buttons - they will form a unified D-pad cross
-            JButton upBtn = new JButton("▲");
-            JButton downBtn = new JButton("▼");
-            JButton leftBtn = new JButton("◄");
-            JButton rightBtn = new JButton("►");
+            JButton upBtn = new JButton("");
+            JButton downBtn = new JButton("");
+            JButton leftBtn = new JButton("");
+            JButton rightBtn = new JButton("");
             
             // Create the center non-clickable square
             JPanel centerSquare = new JPanel();
@@ -291,7 +290,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             Dimension btnSize = new Dimension(56, 56);
             Font btnFont = new Font("Arial", Font.BOLD, 22);
             Color btnColor = new Color(70, 70, 70);
-            Color borderColor = Color.WHITE;
             
             // Style UP button - remove BOTTOM border
             upBtn.setPreferredSize(btnSize);
@@ -301,7 +299,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             upBtn.setBackground(btnColor);
             upBtn.setForeground(Color.WHITE);
             upBtn.setFocusPainted(false);
-            upBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, borderColor));
             upBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             upBtn.setOpaque(true);
             upBtn.setContentAreaFilled(true);
@@ -314,7 +311,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             downBtn.setBackground(btnColor);
             downBtn.setForeground(Color.WHITE);
             downBtn.setFocusPainted(false);
-            downBtn.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, borderColor));
             downBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             downBtn.setOpaque(true);
             downBtn.setContentAreaFilled(true);
@@ -327,7 +323,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             leftBtn.setBackground(btnColor);
             leftBtn.setForeground(Color.WHITE);
             leftBtn.setFocusPainted(false);
-            leftBtn.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0, borderColor));
             leftBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             leftBtn.setOpaque(true);
             leftBtn.setContentAreaFilled(true);
@@ -340,7 +335,6 @@ public class GameCharacter extends JPanel implements ActionListener {
             rightBtn.setBackground(btnColor);
             rightBtn.setForeground(Color.WHITE);
             rightBtn.setFocusPainted(false);
-            rightBtn.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 2, borderColor));
             rightBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             rightBtn.setOpaque(true);
             rightBtn.setContentAreaFilled(true);
