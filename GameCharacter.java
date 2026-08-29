@@ -270,6 +270,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             };
             crossPanel.setBackground(new Color(245, 240, 235));
             crossPanel.setLayout(new GridBagLayout());
+            crossPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
             crossPanel.setPreferredSize(new Dimension(180, 180));
             
             GridBagConstraints gbc = new GridBagConstraints();
@@ -373,7 +374,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             
             // ----- EXPRESSION BUTTON (Circle button on the right) -----
             // Create a circular button using JButton override
-            JButton expressionBtn = new JButton("😊") {
+            JButton expressionBtn = new JButton("") {
                 @Override
                 protected void paintComponent(Graphics g) {
                     Graphics2D g2d = (Graphics2D) g.create();
@@ -406,7 +407,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             expressionBtn.addActionListener(e -> {
                 game.changeExpression();
                 // Update button text to show current expression
-                String[] emojis = {"😊", "😢", "😮", "😠", "😎"};
+                String[] emojis = {"", "", "", "", ""};
                 int currentIndex = game.expressionIndex;
                 expressionBtn.setText(emojis[currentIndex]);
             });
