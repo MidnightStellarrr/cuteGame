@@ -417,7 +417,7 @@ public class GameCharacter extends JPanel implements ActionListener {
             
             // Add a spacer panel to push expression button to the right
             JPanel spacer = new JPanel();
-            spacer.setBackground(Color.DARK_GRAY);
+            spacer.setBackground(new Color(245, 240, 235));
             spacer.setPreferredSize(new Dimension(90, 80));
             bottomPanel.add(spacer);
             
